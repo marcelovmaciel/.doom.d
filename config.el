@@ -143,23 +143,44 @@
 
 (defun roots-theme ()
   (interactive)
-  (set-frame-font (font-spec :family "CozetteVector" :size 20))
+  (set-face-font 'default "Cozette Vector 18")
+;;   (set-frame-font (font-spec :family "CozetteVector" :size 20))
   (load-theme 'doom-nord-light)
   (setq fancy-splash-image "~/Drive/Org/logos/gnuvm.png" )
+  (doom-modeline-mode 1)
+  ;; (doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
 
 
 (defun slick-theme ()
   (interactive)
-  (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (set-face-font 'default "Cascadia Code 18" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
   (load-theme 'doom-gruvbox-light)
   (setq fancy-splash-image (random-choice
                           '("~/Drive/Org/logos/gnu2.png"
                             "~/Drive/Org/logos/ggnu.png")))
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
 
 
 
+(defun elegant-theme ()
+  (interactive)
+  
+  (set-face-font 'default "Roboto Mono Light 17")
+
+  (load-theme 'doom-one-light)
+
+  (setq fancy-splash-image (random-choice
+                          '("~/Drive/Org/logos/gnu2.png"
+                            "~/Drive/Org/logos/ggnu.png")))
+  (doom-modeline-mode -1)
+  (doom-disable-line-numbers-h)
+  (+doom-dashboard-reload t)
+
+  )
 
 
 (defun er-delete-file-and-buffer ()
@@ -180,13 +201,35 @@
 Based on doi-utils-google-scholar."
   (interactive "sQUERY: ")
   (let ((q (string-join (split-string query) "+")))
-  (browse-url
+    (browse-url
    (format
     "http://scholar.google.com/scholar?q=%s" q))))
 
 
+
+(flycheck-define-checker proselint
+  "A linter for prose."
+  :command ("proselint" source-inplace)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": "
+            (id (one-or-more (not (any " "))))
+            (message (one-or-more not-newline)
+                     (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+            line-end))
+  :modes (text-mode markdown-mode gfm-mode org-mode latex-mode))
+(add-to-list 'flycheck-checkers 'proselint)
+
+(defun proselint ()
+  (interactive)
+  (flycheck-mode)
+  (flycheck-select-checker 'proselint)
+  (list-flycheck-errors))
+
+
 (map! "C-c b h" #'helm-bibtex
       "C-c b o" #'orb-note-actions
+      "C-c l s" #'org-store-link
+      "C-c l i" #'org-insert-link
       "C-c b l" #'crossref-lookup
       "C-c b g" #'query-google-scholar
       "C-c e c" #'comment-region
@@ -202,8 +245,19 @@ Based on doi-utils-google-scholar."
       "C-c r h"  #'helm-run-external-command
       "C-c t r" #'roots-theme
       "C-c t s" #'slick-theme
-      )
+      "C-c t e" #'elegant-theme
+      "C-c f b g" #'ispell-buffer
+      "C-c f d" #'ispell-change-dictionary
+      "C-c f b s" #'langtool-check
+      "C-c f b d" #'langtool-check-done
+      "C-c f p" #'proselint
+      "C-c s a p" #'academic-phrases
+      "C-c s a s" #'academic-phrases-by-section
+      "C-c g g" #'magit-status
+ )
 
+
+(setq langtool-language-tool-jar   "/snap/languagetool/22/usr/bin/languagetool-commandline.jar")
 
 (use-package! org-cliplink
   :after org
@@ -244,7 +298,7 @@ Based on doi-utils-google-scholar."
 ;; (use-package! lsp-haskell
 ;;  :ensure t
 ;;  :config
-;;  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
+; ;  (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
 ;;  (setq lsp-haskell-process-path-hie "~/Documents/Work/Projects/foobar/ghcide")
 ;;  (setq lsp-haskell-process-args-hie '())
 ;;  (setq lsp-haskell-process-path-hie "hie-wrapper")
@@ -333,12 +387,133 @@ Based on doi-utils-google-scholar."
 (use-package! org-fc
   :load-path "~/Drive/org-fc"
   :custom
-  (org-fc-directories '("~/Drive/Org/org-roam"))
+  (org-fc-directories '("~/Drive/Org/org-roam-mvm"))
   :config
   (require 'org-fc-hydra))
 
-
+;; This is an Emacs package that creates graphviz directed graphs from
+;; the headings of an org file
+(use-package org-mind-map
+  :load-path "~/Drive/Org/org-mind-map/"
+  :init
+  (require 'ox-org)
+  :ensure t
+  ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;:ensure-system-package (gvgen . graphviz)
+  :config
+  (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  )
 
 (use-package! outshine
   :hook (julia-mode . outshine-mode)
   )
+
+;; (use-package! org-super-agenda
+;;   :after org-agenda
+;;   :custom-face
+;;   (org-super-agenda-header ((default (:inherit propositum-agenda-heading))))
+
+;;   :init
+;;   (setq org-agenda-skip-scheduled-if-done t
+;;       org-agenda-skip-deadline-if-done t
+;;       org-agenda-include-deadlines t
+;;       org-agenda-block-separator nil
+;;       org-agenda-compact-blocks t
+;;       org-agenda-start-day nil ;; i.e. today
+;;       org-agenda-span 1
+;;       org-agenda-start-on-weekday nil)
+;;   (setq org-agenda-custom-commands
+;;         '(("c" "Super view"
+;;            ((agenda "" ((org-agenda-overriding-header "")
+;;                         (org-super-agenda-groups
+;;                          '((:name "Today"
+;;                                   :time-grid t
+;;                                   :date today
+;;                                   :order 1)))))
+;;             (alltodo "" ((org-agenda-overriding-header "")
+;;                          (org-super-agenda-groups
+;;                           '((:log t)
+;;                             (:name #(" due this week\n" 0 1 (rear-nonsticky t display (raise -0.24) font-lock-face (:family "Material Icons" :height 1.2) face (:family "Material Icons" :height 1.2)))
+;;                                    :deadline past)
+;;                             (:name "Important"
+;;                                    :priority "A"
+;;                                    :order 6)
+;;                             (:name "Due soon"
+;;                                    :deadline future)
+;;                             (:name "Due Today"
+;;                                    :deadline today
+;;                                    :order 2)
+;;                             (:name "Scheduled Soon"
+;;                                    :scheduled future
+;;                                    :order 8)
+;;                             (:name "Overdue"
+;;                                    :deadline past
+;;                                    :order 7)
+;;                             (:name "Meetings"
+;;                                    :and (:todo "MEET" :scheduled future)
+;;                                    :order 10)
+;;                             (:discard (:not (:todo "TODO")))))))))))
+;;   :config
+;;   (org-super-agenda-mode))
+
+
+
+
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#f2e5bc" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
+ '(custom-safe-themes
+   (quote
+    ("93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
+ '(fci-rule-color "#AEBACF")
+ '(jdee-db-active-breakpoint-face-colors (cons "#F0F4FC" "#5d86b6"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#F0F4FC" "#4F894C"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#F0F4FC" "#B8C5DB"))
+ '(objed-cursor-color "#99324B")
+ '(org-agenda-files
+   (quote
+    ("~/Drive/Org/org-roam-mvm/20200520213408-my_project_ideas.org" "~/Drive/Org/agenda/week-agenda.org")))
+ '(org-fc-directories (quote ("~/Drive/Org/org-roam-mvm")))
+ '(pdf-view-midnight-colors (cons "#3B4252" "#E5E9F0"))
+ '(rustic-ansi-faces
+   ["#E5E9F0" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
+ '(vc-annotate-background "#E5E9F0")
+ '(vc-annotate-color-map
+   (list
+    (cons 20 "#4F894C")
+    (cons 40 "#688232")
+    (cons 60 "#817b19")
+    (cons 80 "#9A7500")
+    (cons 100 "#a0640c")
+    (cons 120 "#a65419")
+    (cons 140 "#AC4426")
+    (cons 160 "#a53f37")
+    (cons 180 "#9e3a49")
+    (cons 200 "#97365B")
+    (cons 220 "#973455")
+    (cons 240 "#983350")
+    (cons 260 "#99324B")
+    (cons 280 "#a0566f")
+    (cons 300 "#a87b93")
+    (cons 320 "#b0a0b6")
+    (cons 340 "#AEBACF")
+    (cons 360 "#AEBACF")))
+ '(vc-annotate-very-old-color nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

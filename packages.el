@@ -46,6 +46,8 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
+(package! academic-phrases)
+
 (package! company-org-roam
    :recipe (:host github :repo "jethrokuan/company-org-roam"))
 
@@ -81,3 +83,5 @@
 (package! outshine)
 
 (package! shx)
+
+;;(package! org-super-agenda)
