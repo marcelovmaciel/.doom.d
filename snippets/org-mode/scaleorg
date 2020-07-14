@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:scaleorg
+# key:scaleorg
+# --
+#+ATTR_ORG: :width 500
