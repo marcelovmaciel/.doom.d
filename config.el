@@ -53,8 +53,6 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-
-
 (use-package! org-roam
   :init
   (setq org-roam-directory "~/Drive/Org/org-roam-mvm")
@@ -145,8 +143,8 @@
   (interactive)
   (set-face-font 'default "Cozette Vector 18")
 ;;   (set-frame-font (font-spec :family "CozetteVector" :size 20))
-  (load-theme 'doom-nord-light)
-  (setq fancy-splash-image "~/Drive/Org/logos/gnuvm.png" )
+  (load-theme 'acme)
+  (setq fancy-splash-image "~/Drive/Org/logos/automata4.png" )
   (doom-modeline-mode 1)
   ;; (doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
@@ -163,6 +161,17 @@
   (doom-modeline-mode 1)
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
+
+
+(defun prog-theme ()
+  (interactive)
+  (set-face-font 'default "JuliaMono Bold 18" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'doom-challenger-deep)
+  (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t) )
 
 
 
@@ -194,6 +203,16 @@
           (delete-file filename)
           (message "Deleted file %s" filename)
           (kill-buffer))))))
+
+
+(defun get-alarm (query)
+
+  (interactive "sDayWhitespaceHour: ")
+
+  (let ((al (format "alarm -s %s  /home/mvmaciel/alarm/sounds/xylophone.mp3" query)))
+    (kill-new al)
+    (print al)))
+
 
 
 (defun query-google-scholar (query)
@@ -246,6 +265,7 @@ Based on doi-utils-google-scholar."
       "C-c t r" #'roots-theme
       "C-c t s" #'slick-theme
       "C-c t e" #'elegant-theme
+      "C-c t p" #'prog-theme
       "C-c f b g" #'ispell-buffer
       "C-c f d" #'ispell-change-dictionary
       "C-c f b s" #'langtool-check
@@ -253,8 +273,31 @@ Based on doi-utils-google-scholar."
       "C-c f p" #'proselint
       "C-c s a p" #'academic-phrases
       "C-c s a s" #'academic-phrases-by-section
+      "C-c s s s" #'swiper
+      "C-c s s m" #'swiper-multi
+      "C-c s s i" #'swiper-isearch
+      "C-c s s a" #'swiper-all
       "C-c g g" #'magit-status
+      "C-c e l" #'mc/edit-lines
+      "C-c e m" #'mc/mark-all-in-region
+      "C-c C-<mouse-1>" #'mc/add-cursor-on-click
  )
+
+(global-set-key (kbd "M-g f") 'avy-goto-line)
+(global-set-key (kbd "M-g e") 'avy-goto-word-0)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
+(global-set-key (kbd "M-g w") 'avy-goto-char-2)
+
+(set-register ?a (cons 'file "~/Drive/Org/agenda/week-agenda.org"))
+(set-register ?f
+              (cons 'file "~/Drive/Org/org-roam-mvm/20200520213408-my_project_ideas.org"))
+(set-register ?g (cons 'file "~/Drive/Org/Projects/gtd-inbox.org"))
+
+(set-register ?q (cons 'file "~/Drive/Org/org-roam-mvm/20200703013409-questions_for_reading.org"))
+
+(set-register ?p (cons 'file "~/Drive/Org/Projects/focus.org"))
+
+(set-register ?b (cons 'file "~/Drive/Org/bib/refs.bib"))
 
 
 (setq langtool-language-tool-jar   "/snap/languagetool/22/usr/bin/languagetool-commandline.jar")
@@ -414,6 +457,18 @@ Based on doi-utils-google-scholar."
   :hook (julia-mode . outshine-mode)
   )
 
+(setq org-use-property-inheritance nil)
+
+
+(setq org-tag-alist '((:startgroup . nil)
+                      ("@task" . ?t)
+                      ("@habit" . ?h)
+                      ("@appt" . ?a)
+                      ("@prjct" . ?p)
+                      (:endgroup . nil)
+                      ))
+
+
 ;; (use-package! org-super-agenda
 ;;   :after org-agenda
 ;;   :custom-face
@@ -476,7 +531,7 @@ Based on doi-utils-google-scholar."
    ["#f2e5bc" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
  '(custom-safe-themes
    (quote
-    ("93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
+    ("893eb2887d8e59f6dde92c217801d310f8dacaefa3bf071b27f7bbb1deaa70b2" "0cb1b0ea66b145ad9b9e34c850ea8e842c4c4c83abe04e37455a1ef4cc5b8791" "6177ecbffb8f37756012c9ee9fd73fc043520836d254397566e37c6204118852" "3577ee091e1d318c49889574a31175970472f6f182a9789f1a3e9e4513641d86" "93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
  '(fci-rule-color "#AEBACF")
  '(jdee-db-active-breakpoint-face-colors (cons "#F0F4FC" "#5d86b6"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#F0F4FC" "#4F894C"))
@@ -484,7 +539,13 @@ Based on doi-utils-google-scholar."
  '(objed-cursor-color "#99324B")
  '(org-agenda-files
    (quote
-    ("~/Drive/Org/org-roam-mvm/20200520213408-my_project_ideas.org" "~/Drive/Org/agenda/week-agenda.org")))
+    ("~/Drive/Org/Projects/nature-computation/todo.org" "~/Drive/Org/Projects/focus.org" "~/Drive/Org/org-roam-mvm/20200520213408-my_project_ideas.org" "~/Drive/Org/agenda/week-agenda.org")))
+ '(org-agenda-sorting-strategy
+   (quote
+    ((agenda habit-down time-up priority-down category-keep)
+     (todo priority-down category-keep)
+     (tags priority-down category-keep)
+     (search category-keep))))
  '(org-fc-directories (quote ("~/Drive/Org/org-roam-mvm")))
  '(pdf-view-midnight-colors (cons "#3B4252" "#E5E9F0"))
  '(rustic-ansi-faces

@@ -79,7 +79,8 @@
 
 (package! org-roam-bibtex)
 
-
+(package! acme-theme)
+(package! multiple-cursors)
 (package! outshine)
 
 (package! shx)
