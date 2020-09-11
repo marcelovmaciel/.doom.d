@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name:ntoc
+# key:ntoc
+# --
+#+OPTIONS: toc:nil

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name:jsrc
+# key: jsrc
+# --
+#+BEGIN_SRC julia :results output
+
+#+END_SRC

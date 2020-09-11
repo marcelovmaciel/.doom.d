@@ -141,7 +141,7 @@
 
 (defun roots-theme ()
   (interactive)
-  (set-face-font 'default "Cozette Vector 18")
+  (set-face-font 'default "Cascadia Code 18")
 ;;   (set-frame-font (font-spec :family "CozetteVector" :size 20))
   (load-theme 'acme)
   (setq fancy-splash-image "~/Drive/Org/logos/automata4.png" )
@@ -161,6 +161,17 @@
   (doom-modeline-mode 1)
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
+
+(defun snazzy-theme ()
+  (interactive)
+  (set-face-font 'default "Cascadia Code 18" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'doom-snazzy)
+  (setq fancy-splash-image "~/Drive/Org/logos/automata4.png")  
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t) )
+
 
 
 (defun prog-theme ()
@@ -259,6 +270,7 @@ Based on doi-utils-google-scholar."
       "C-c D"  #'er-delete-file-and-buffer
       "C-c s p" #'+ivy/project-search
       "C-c s o" #'+lookup/online
+      "C-c s d" #'+lookup/dictionary-definition
       "C-c r e t" #'+eshell/toggle
       "C-c r e h" #'+eshell/here
       "C-c r h"  #'helm-run-external-command
@@ -266,6 +278,7 @@ Based on doi-utils-google-scholar."
       "C-c t s" #'slick-theme
       "C-c t e" #'elegant-theme
       "C-c t p" #'prog-theme
+      "C-c t z" #'snazzy-theme
       "C-c f b g" #'ispell-buffer
       "C-c f d" #'ispell-change-dictionary
       "C-c f b s" #'langtool-check
@@ -281,6 +294,7 @@ Based on doi-utils-google-scholar."
       "C-c e l" #'mc/edit-lines
       "C-c e m" #'mc/mark-all-in-region
       "C-c C-<mouse-1>" #'mc/add-cursor-on-click
+      "C-c o h" #'outline-hide-body
  )
 
 (global-set-key (kbd "M-g f") 'avy-goto-line)
@@ -327,6 +341,11 @@ Based on doi-utils-google-scholar."
     (add-to-list 'deft-extensions "tex")
     )
 
+(use-package! peep-dired
+  :ensure t
+  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
+  :bind (:map dired-mode-map
+              ("P" . peep-dired)))
 
 (use-package! magit-org-todos
   :config
@@ -528,10 +547,10 @@ Based on doi-utils-google-scholar."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
-   ["#f2e5bc" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
+   ["#181A1F" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
  '(custom-safe-themes
    (quote
-    ("893eb2887d8e59f6dde92c217801d310f8dacaefa3bf071b27f7bbb1deaa70b2" "0cb1b0ea66b145ad9b9e34c850ea8e842c4c4c83abe04e37455a1ef4cc5b8791" "6177ecbffb8f37756012c9ee9fd73fc043520836d254397566e37c6204118852" "3577ee091e1d318c49889574a31175970472f6f182a9789f1a3e9e4513641d86" "93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
+    ("9b272154fb77a926f52f2756ed5872877ad8d73d018a426d44c6083d1ed972b1" "1623aa627fecd5877246f48199b8e2856647c99c6acdab506173f9bb8b0a41ac" "7b3d184d2955990e4df1162aeff6bfb4e1c3e822368f0359e15e2974235d9fa8" "893eb2887d8e59f6dde92c217801d310f8dacaefa3bf071b27f7bbb1deaa70b2" "0cb1b0ea66b145ad9b9e34c850ea8e842c4c4c83abe04e37455a1ef4cc5b8791" "6177ecbffb8f37756012c9ee9fd73fc043520836d254397566e37c6204118852" "3577ee091e1d318c49889574a31175970472f6f182a9789f1a3e9e4513641d86" "93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
  '(fci-rule-color "#AEBACF")
  '(jdee-db-active-breakpoint-face-colors (cons "#F0F4FC" "#5d86b6"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#F0F4FC" "#4F894C"))
@@ -547,6 +566,7 @@ Based on doi-utils-google-scholar."
      (tags priority-down category-keep)
      (search category-keep))))
  '(org-fc-directories (quote ("~/Drive/Org/org-roam-mvm")))
+ '(package-selected-packages (quote (org-mind-map)))
  '(pdf-view-midnight-colors (cons "#3B4252" "#E5E9F0"))
  '(rustic-ansi-faces
    ["#E5E9F0" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])

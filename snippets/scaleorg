@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name:scaleorg
+# uuid:
+# key:scaleorg
+# condition: t
+# --
+#+ATTR_ORG: :width 500

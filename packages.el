@@ -54,6 +54,8 @@
 
 (package! fira-code-mode)
 
+(package! peep-dired)
+
 (package! olivetti)
 
 
