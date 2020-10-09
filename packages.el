@@ -55,7 +55,7 @@
 (package! fira-code-mode)
 
 (package! peep-dired)
-
+(package! less-theme)
 (package! olivetti)
 
 
