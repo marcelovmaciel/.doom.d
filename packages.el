@@ -55,16 +55,20 @@
 (package! fira-code-mode)
 
 (package! peep-dired)
-(package! less-theme)
+;(package! less-theme)
 (package! olivetti)
-
+; (package! nano-emacs :recipe (:host github :repo "rougier/nano-emacs"))
 
  (package! lsp-julia :recipe
    (:host github
     :repo "non-Jedi/lsp-julia"
     :files (:defaults "languageserver")))
-
+(package! xenops)
 (package! magit-org-todos)
+(package!
+   burly
+   :recipe (:host github
+            :repo "alphapapa/burly.el"))
 
 (package! org-download)
 

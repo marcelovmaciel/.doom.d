@@ -184,6 +184,18 @@
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t) )
 
+
+(defun nord-theme ()
+  (interactive)
+  (set-face-font 'default "Cascadia Code 18" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'doom-nord)
+  (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t) )
+
+
 (load "~/Drive/less-theme-master/less-theme.el")
 
 
@@ -191,7 +203,7 @@
 (defun elegant-theme ()
   (interactive)
   (load-theme 'less)
-  (set-face-font 'default "Roboto Mono Light 17")
+  (set-face-font 'default "Roboto Mono Medium 17")
  ;; (random-choice
  ;;                          '("~/Drive/Org/logos/gnu2.png"
  ;;                            "~/Drive/Org/logos/ggnu.png"))
@@ -201,11 +213,15 @@
   (+doom-dashboard-reload t)
   )
 
+(defun nautilus-here ()
+  (interactive)
+  (shell-command "nautilus .")
+)
 
 (defun black-theme ()
   (interactive)
   (load-theme 'less-black)
-  (set-face-font 'default "Roboto Mono Light 17")
+  (set-face-font 'default "Roboto Mono Medium 17")
  ;; (random-choice
  ;;                          '("~/Drive/Org/logos/gnu2.png"
  ;;                            "~/Drive/Org/logos/ggnu.png"))
@@ -215,7 +231,13 @@
   (+doom-dashboard-reload t)
   )
 
+;; (require 'disp-table)
 
+;; (require 'nano-theme-light)
+;; (require 'nano-modeline)
+;; (require 'nano-help)
+;; (require 'nano-layout)
+;; (setq doom-theme 'nil)
 
 (defun er-delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
@@ -286,6 +308,7 @@ Based on doi-utils-google-scholar."
       "C-c b l" #'crossref-lookup
       "C-c b w" #'query-wordnik
       "C-c b g" #'query-google-scholar
+      "C-c n" #'nautilus-here
       "C-c e c" #'comment-region
       "C-c e u" #'uncomment-region
       "C-c e a" #'org-fc-hydra-type/body
@@ -304,6 +327,7 @@ Based on doi-utils-google-scholar."
       "C-c t p" #'prog-theme
       "C-c t b" #'black-theme
       "C-c t z" #'snazzy-theme
+      "C-c t n" #'nord-theme
       "C-c f b g" #'ispell-buffer
       "C-c f d" #'ispell-change-dictionary
       "C-c f b s" #'langtool-check
@@ -339,7 +363,7 @@ Based on doi-utils-google-scholar."
 (set-register ?b (cons 'file "~/Drive/Org/bib/refs.bib"))
 
 
-(setq langtool-language-tool-jar   "/snap/languagetool/22/usr/bin/languagetool-commandline.jar")
+(setq langtool-language-tool-jar   "/snap/languagetool/24/usr/bin/languagetool-commandline.jar")
 
 (use-package! org-cliplink
   :after org
