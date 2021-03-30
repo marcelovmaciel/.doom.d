@@ -69,8 +69,16 @@
    burly
    :recipe (:host github
             :repo "alphapapa/burly.el"))
-
+(package! eglot-jl)
 (package! org-download)
+
+
+(package! dom)
+
+;; (package! mathpix.el
+;;   :recipe (:host github
+;;            :repo "jethrokuan/mathpix.el"))
+
 
 (package! org-fragtog)
 
@@ -84,11 +92,12 @@
 (package! org-ref)
 
 (package! org-roam-bibtex)
-
+(package! org-roam-server)
 (package! acme-theme)
 (package! multiple-cursors)
 (package! outshine)
 
 (package! shx)
-
+(package! psc-ide )
+(package! poet-theme)
 ;;(package! org-super-agenda)

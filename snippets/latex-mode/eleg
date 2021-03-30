@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name:eleg
+# key:
+# --
+\documentclass[geye,green,pad,en]{elegantnote}
+
+\title{A Note Example}
+\author{MVM}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Example Text.
+
+\end{document}

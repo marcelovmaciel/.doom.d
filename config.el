@@ -73,15 +73,24 @@
 ;;   (set-company-backend! 'org-mode '(company-org-roam company-yasnippet company-dabbrev)))
 
 
-
-(use-package! lsp-julia
+(use-package!  eglot-jl
   :config
-  (add-hook 'julia-mode-hook #'lsp)
-  ; (setq lsp-julia-default-environment "~/.julia/environments/v1.3")
-  (setq lsp-folding-range-limit 100)
-  (setq lsp-julia-package-dir nil)
-  ; (setq lsp-julia-flags '("--project=/Users/gtrun/.julia/packages/languageserver"  "--startup-file=no" "--history-file=no"))
+   ; (add-hook 'julia-mode-hook . #'eglot)
+  ; (eglot-jl-init)
+  (with-eval-after-load 'eglot
+  (eglot-jl-init))
   )
+
+(load "~/.doom.d/scihub.el" )
+
+;; (use-package! lsp-julia
+;;   :config
+;;   (add-hook 'julia-mode-hook #'lsp)
+;;   ; (setq lsp-julia-default-environment "~/.julia/environments/v1.3")
+;;   (setq lsp-folding-range-limit 100)
+;;   (setq lsp-julia-package-dir nil)
+;;   ; (setq lsp-julia-flags '("--project=/Users/gtrun/.julia/packages/languageserver"  "--startup-file=no" "--history-file=no"))
+;;   )
 
 
 (use-package! company-lsp
@@ -116,6 +125,7 @@
 ;;   (define-key company-active-map (kbd "C-p") 'company-select-previous)
 ;;   (define-key company-active-map (kbd "C-n") 'company-select-next))
 
+
 (setq org-journal-dir "~/Drive/Org/journal")
 (global-page-break-lines-mode 1 )
 
@@ -138,7 +148,10 @@
                        (4 'org-code) ; "code..." part.
                        )))
 
-
+(defun org-day ()
+  (interactive)
+  (progn (org-agenda)
+         (org-agenda-day-view)))
 (defun roots-theme ()
   (interactive)
   (set-face-font 'default "Cascadia Code 18")
@@ -149,6 +162,36 @@
   ;; (doom-enable-line-numbers-h)
   (+doom-dashboard-reload t))
 
+
+(defun mypoet-theme ()
+  (interactive)
+  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 130)
+  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
+  (set-face-attribute 'variable-pitch nil :family "IBM Plex Serif")
+  (set-frame-font  (font-spec :family "DejaVu Sans Mono" :size 18))
+  (load-theme 'poet)
+  (setq fancy-splash-image (random-choice
+                          '("~/Drive/Org/logos/gnu2.png"
+                            "~/Drive/Org/logos/ggnu.png")))
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (doom/reload-theme)
+  (+doom-dashboard-reload t))
+
+(defun mypoet-mono-theme ()
+  (interactive)
+  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 130)
+  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
+  (set-face-attribute 'variable-pitch nil :family "IBM Plex Serif")
+  (set-frame-font  (font-spec :family "DejaVu Sans Mono" :size 18))
+  (load-theme 'poet-monochrome)
+  (setq fancy-splash-image (random-choice
+                          '("~/Drive/Org/logos/gnu2.png"
+                            "~/Drive/Org/logos/ggnu.png")))
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (doom/reload-theme)
+  (+doom-dashboard-reload t))
 
 (defun slick-theme ()
   (interactive)
@@ -299,6 +342,51 @@ Based on doi-utils-google-scholar."
   (flycheck-mode)
   (flycheck-select-checker 'proselint)
   (list-flycheck-errors))
+(defun pdf-view--rotate (&optional counterclockwise-p page-p)
+  "Rotate PDF 90 degrees.  Requires pdftk to work.\n
+Clockwise rotation is the default; set COUNTERCLOCKWISE-P to
+non-nil for the other direction.  Rotate the whole document by
+default; set PAGE-P to non-nil to rotate only the current page.
+\nWARNING: overwrites the original file, so be careful!"
+  ;; error out when pdftk is not installed
+  (if (null (executable-find "pdftk"))
+      (error "Rotation requires pdftk")
+    ;; only rotate in pdf-view-mode
+    (when (eq major-mode 'pdf-view-mode)
+      (let* ((rotate (if counterclockwise-p "left" "right"))
+             (file   (format "\"%s\"" (pdf-view-buffer-file-name)))
+             (page   (pdf-view-current-page))
+             (pages  (cond ((not page-p)                        ; whole doc?
+                            (format "1-end%s" rotate))
+                           ((= page 1)                          ; first page?
+                            (format "%d%s %d-end"
+                                    page rotate (1+ page)))
+                           ((= page (pdf-info-number-of-pages)) ; last page?
+                            (format "1-%d %d%s"
+                                    (1- page) page rotate))
+                           (t                                   ; interior page?
+                            (format "1-%d %d%s %d-end"
+                                    (1- page) page rotate (1+ page))))))
+        ;; empty string if it worked
+        (if (string= "" (shell-command-to-string
+                         (format (concat "pdftk %s cat %s "
+                                         "output %s.NEW "
+                                         "&& mv %s.NEW %s")
+                                 file pages file file file)))
+            (pdf-view-revert-buffer nil t)
+          (error "Rotation error!"))))))
+
+(defun pdf-view-rotate-clockwise (&optional arg)
+  "Rotate PDF page 90 degrees clockwise.  With prefix ARG, rotate
+entire document."
+  (interactive "P")
+  (pdf-view--rotate nil (not arg)))
+
+(defun pdf-view-rotate-counterclockwise (&optional arg)
+  "Rotate PDF page 90 degrees counterclockwise.  With prefix ARG,
+rotate entire document."
+  (interactive "P")
+  (pdf-view--rotate :counterclockwise (not arg)))
 
 
 (map! "C-c b h" #'helm-bibtex
@@ -328,6 +416,8 @@ Based on doi-utils-google-scholar."
       "C-c t b" #'black-theme
       "C-c t z" #'snazzy-theme
       "C-c t n" #'nord-theme
+      "C-c t l" #'mypoet-theme
+      "C-c t m" #'mypoet-mono-theme
       "C-c f b g" #'ispell-buffer
       "C-c f d" #'ispell-change-dictionary
       "C-c f b s" #'langtool-check
@@ -344,7 +434,11 @@ Based on doi-utils-google-scholar."
       "C-c e m" #'mc/mark-all-in-region
       "C-c C-<mouse-1>" #'mc/add-cursor-on-click
       "C-c o h" #'outline-hide-body
+      "C-c o a d" #'org-day
+      "C-c o a w" #'org-week
+      "C-c o T" #'display-time-mode
  )
+
 
 (global-set-key (kbd "M-g f") 'avy-goto-line)
 (global-set-key (kbd "M-g e") 'avy-goto-word-0)
@@ -357,7 +451,6 @@ Based on doi-utils-google-scholar."
 (set-register ?g (cons 'file "~/Drive/Org/Projects/gtd-inbox.org"))
 
 (set-register ?q (cons 'file "~/Drive/Org/org-roam-mvm/20200703013409-questions_for_reading.org"))
-
 (set-register ?p (cons 'file "~/Drive/Org/Projects/focus.org"))
 
 (set-register ?b (cons 'file "~/Drive/Org/bib/refs.bib"))
@@ -469,6 +562,11 @@ Based on doi-utils-google-scholar."
  )
 )
 
+;; (use-package mathpix.el
+;;   :custom ((mathpix-app-id "marcelovmaciel@gmail.com")
+;;            (mathpix-app-key "76Xrgm2HKGTZxbj"))
+;;   :bind
+;;   ("C-x m" . mathpix-screenshot))
 
 
 (use-package! org-roam-bibtex
@@ -493,6 +591,9 @@ Based on doi-utils-google-scholar."
 (setq bibtex-dialect 'BibTeX)
 (setq bibtex-maintain-sorted-entries t)
 
+
+; (use-package! org-transclusion
+;   :load-path "~/Drive/Org/org-transclusion" )
 
 
 (use-package! org-fc
@@ -521,9 +622,44 @@ Based on doi-utils-google-scholar."
   ;; (setq org-mind-map-engine "circo")  ; Circular Layout
   )
 
+
+
+(map! :after julia-mode
+      :map julia-mode-map
+      "C-c s l" #'julia-repl-send-line
+      "C-c s r" #'julia-repl-send-region-or-line
+      "C-c s b" #'julia-repl-send-buffer
+      "C-c g d" #'xref-find-definitions
+      "C-c g D" #'eglot-find-declaration
+      "C-c e r" #'eglot-rename
+      )
+
+(use-package! org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+
 (use-package! outshine
   :hook (julia-mode . outshine-mode)
+  :hook (haskell-mode . outshine-mode)
   )
+
+(use-package! psc-ide
+  :hook (purescript-mode .
+                         '((psc-ide-mode)
+                           (company-mode)
+                           (flycheck-mode)
+                           (turn-on-purescript-indentation))))
 
 (setq org-use-property-inheritance nil)
 
@@ -536,7 +672,9 @@ Based on doi-utils-google-scholar."
                       (:endgroup . nil)
                       ))
 
-
+;; fixing annoying snippet behavior
+;; https://stackoverflow.com/questions/7619640/emacs-latex-yasnippet-why-are-newlines-inserted-after-a-snippet
+;; (setq mode-require-final-newline nil)
 ;; (use-package! org-super-agenda
 ;;   :after org-agenda
 ;;   :custom-face
@@ -585,8 +723,8 @@ Based on doi-utils-google-scholar."
 ;;   :config
 ;;   (org-super-agenda-mode))
 
-
-
+; (setq lsp-haskell-process-path-hie  "haskell-language-server-wrapper")
+;; (setq lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper-1.0.0")
 
 
 
@@ -639,7 +777,7 @@ Based on doi-utils-google-scholar."
     (cons 300 "#a87b93")
     (cons 320 "#b0a0b6")
     (cons 340 "#AEBACF")
-    (cons 360 "#AEBACF")))
+p    (cons 360 "#AEBACF")))
  '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
