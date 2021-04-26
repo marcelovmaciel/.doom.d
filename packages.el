@@ -100,4 +100,9 @@
 (package! shx)
 (package! psc-ide )
 (package! poet-theme)
+(package! cyberpunk-2019-theme)
+(package! rebecca-theme)
+(package! chocolate-theme)
+
+
 ;;(package! org-super-agenda)

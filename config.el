@@ -152,46 +152,7 @@
   (interactive)
   (progn (org-agenda)
          (org-agenda-day-view)))
-(defun roots-theme ()
-  (interactive)
-  (set-face-font 'default "Cascadia Code 18")
-;;   (set-frame-font (font-spec :family "CozetteVector" :size 20))
-  (load-theme 'acme)
-  (setq fancy-splash-image "~/Drive/Org/logos/automata4.png" )
-  (doom-modeline-mode 1)
-  ;; (doom-enable-line-numbers-h)
-  (+doom-dashboard-reload t))
 
-
-(defun mypoet-theme ()
-  (interactive)
-  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 130)
-  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
-  (set-face-attribute 'variable-pitch nil :family "IBM Plex Serif")
-  (set-frame-font  (font-spec :family "DejaVu Sans Mono" :size 18))
-  (load-theme 'poet)
-  (setq fancy-splash-image (random-choice
-                          '("~/Drive/Org/logos/gnu2.png"
-                            "~/Drive/Org/logos/ggnu.png")))
-  (doom-modeline-mode 1)
-  ;;(doom-enable-line-numbers-h)
-  (doom/reload-theme)
-  (+doom-dashboard-reload t))
-
-(defun mypoet-mono-theme ()
-  (interactive)
-  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 130)
-  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
-  (set-face-attribute 'variable-pitch nil :family "IBM Plex Serif")
-  (set-frame-font  (font-spec :family "DejaVu Sans Mono" :size 18))
-  (load-theme 'poet-monochrome)
-  (setq fancy-splash-image (random-choice
-                          '("~/Drive/Org/logos/gnu2.png"
-                            "~/Drive/Org/logos/ggnu.png")))
-  (doom-modeline-mode 1)
-  ;;(doom-enable-line-numbers-h)
-  (doom/reload-theme)
-  (+doom-dashboard-reload t))
 
 (defun slick-theme ()
   (interactive)
@@ -228,6 +189,53 @@
   (+doom-dashboard-reload t) )
 
 
+
+(defun one-theme ()
+  (interactive)
+  (set-face-font 'default "JuliaMono Bold 18" )
+
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'doom-one-light)
+  (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t) )
+
+
+(defun rebecca-theme ()
+  (interactive)
+  (set-face-font 'default "JuliaMono Bold 18" )
+    ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+
+  (load-theme 'rebecca)
+   ; (add-hook 'minibuffer-setup-hook ')
+  ;; (add-hook 'minibuffer-setup-hook
+  ;;     (lambda ()
+  ;;       (make-local-variable 'face-remapping-alist)
+  ;;       (add-to-list 'face-remapping-alist '(default (:background "grey10")))))
+(setq ivy-display-style 'fancy)
+    (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  ;;
+  (+doom-dashboard-reload t))
+
+
+(defun cyberpunk-theme ()
+  (interactive)
+  (set-face-font 'default "JuliaMono Bold 18" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'cyberpunk-2019)
+  (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t)
+ '(mode-line ((t (:foreground "#fafafa" :background "DarkOrange" :box nil))))
+ '(mode-line-inactive ((t (:foreground "#fafafa" :background "#666666" :box nil))))
+  )
+
+
+
 (defun nord-theme ()
   (interactive)
   (set-face-font 'default "Cascadia Code 18" )
@@ -238,10 +246,18 @@
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t) )
 
+(defun chocolate-theme ()
+  (interactive)
+  (set-face-font 'default "Cascadia Code 16" )
+  ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+  (load-theme 'chocolate)
+  (setq fancy-splash-image  "~/Drive/Org/logos/automata4.png")
+  (doom-modeline-mode 1)
+  ;;(doom-enable-line-numbers-h)
+  (+doom-dashboard-reload t) )
+
 
 (load "~/Drive/less-theme-master/less-theme.el")
-
-
 
 (defun elegant-theme ()
   (interactive)
@@ -409,15 +425,16 @@ rotate entire document."
       "C-c r e t" #'+eshell/toggle
       "C-c r e h" #'+eshell/here
       "C-c r h"  #'helm-run-external-command
-      "C-c t r" #'roots-theme
       "C-c t s" #'slick-theme
       "C-c t e" #'elegant-theme
       "C-c t p" #'prog-theme
+      "C-c t c r" #'rebecca-theme
+      "C-c t c y" #'cyberpunk-theme
+      "C-c t c c" #'chocolate-theme
       "C-c t b" #'black-theme
       "C-c t z" #'snazzy-theme
       "C-c t n" #'nord-theme
-      "C-c t l" #'mypoet-theme
-      "C-c t m" #'mypoet-mono-theme
+      "C-c t o" #'one-theme
       "C-c f b g" #'ispell-buffer
       "C-c f d" #'ispell-change-dictionary
       "C-c f b s" #'langtool-check
@@ -431,6 +448,12 @@ rotate entire document."
       "C-c s s a" #'swiper-all
       "C-c g g" #'magit-status
       "C-c e l" #'mc/edit-lines
+
+      "C-c g a l" #'avy-goto-line
+      "C-c g a w 0" #'avy-goto-word-0
+      "C-c g a w 1 " #'avy-goto-word-1
+      "C-c g a c 1" #'avy-goto-char
+      "C-c g a c 2 " #'avy-goto-char-2
       "C-c e m" #'mc/mark-all-in-region
       "C-c C-<mouse-1>" #'mc/add-cursor-on-click
       "C-c o h" #'outline-hide-body
@@ -439,11 +462,6 @@ rotate entire document."
       "C-c o T" #'display-time-mode
  )
 
-
-(global-set-key (kbd "M-g f") 'avy-goto-line)
-(global-set-key (kbd "M-g e") 'avy-goto-word-0)
-(global-set-key (kbd "M-g w") 'avy-goto-word-1)
-(global-set-key (kbd "M-g w") 'avy-goto-char-2)
 
 (set-register ?a (cons 'file "~/Drive/Org/agenda/week-agenda.org"))
 (set-register ?f
@@ -725,6 +743,9 @@ rotate entire document."
 
 ; (setq lsp-haskell-process-path-hie  "haskell-language-server-wrapper")
 ;; (setq lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper-1.0.0")
+
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
 
 
 
