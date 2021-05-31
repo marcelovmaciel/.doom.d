@@ -47,23 +47,14 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 (package! academic-phrases)
-
-(package! company-org-roam
-   :recipe (:host github :repo "jethrokuan/company-org-roam"))
-
-
-(package! fira-code-mode)
-
 (package! peep-dired)
 ;(package! less-theme)
 (package! olivetti)
-; (package! nano-emacs :recipe (:host github :repo "rougier/nano-emacs"))
-
  (package! lsp-julia :recipe
    (:host github
     :repo "non-Jedi/lsp-julia"
     :files (:defaults "languageserver")))
-(package! xenops)
+
 (package! magit-org-todos)
 (package!
    burly
@@ -75,34 +66,24 @@
 
 (package! dom)
 
-;; (package! mathpix.el
-;;   :recipe (:host github
-;;            :repo "jethrokuan/mathpix.el"))
-
-
 (package! org-fragtog)
-
 (package! page-break-lines)
-
 (package! forge)
-
 (package! all-the-icons-dired)
-
-
 (package! org-ref)
 
 (package! org-roam-bibtex)
 (package! org-roam-server)
-(package! acme-theme)
+; (package! acme-theme)
 (package! multiple-cursors)
 (package! outshine)
 
 (package! shx)
-(package! psc-ide )
-(package! poet-theme)
+(package! psc-ide)
+
 (package! cyberpunk-2019-theme)
 (package! rebecca-theme)
 (package! chocolate-theme)
-
-
-;;(package! org-super-agenda)
+(package! sly-quicklisp)
+(package! shen-mode)
+(package! anki-editor)

@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name:eleg
-# key:
+# key:eleg
 # --
 \documentclass[geye,green,pad,en]{elegantnote}
 

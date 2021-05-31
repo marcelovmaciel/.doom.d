@@ -61,6 +61,8 @@
 (use-package! org-roam-protocol
   :after org-protocol)
 
+
+
 ; (setq org-roam-db-location "~/Drive/Org/org-roam")
 ; (require 'org-roam-protocol)
 
@@ -82,7 +84,7 @@
   )
 
 (load "~/.doom.d/scihub.el" )
-
+(load  "~/.doom.d/latex-wrap.el")
 ;; (use-package! lsp-julia
 ;;   :config
 ;;   (add-hook 'julia-mode-hook #'lsp)
@@ -153,7 +155,6 @@
   (progn (org-agenda)
          (org-agenda-day-view)))
 
-
 (defun slick-theme ()
   (interactive)
   (set-face-font 'default "Cascadia Code 18" )
@@ -176,14 +177,21 @@
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t) )
 
+(defhydra hydra-window (global-map "<f3>")
+  "change window size"
+  ("l" enlarge-window-horizontally "enlarge h")
+  ("u" enlarge-window "enlarge v")
+  ("r" shrink-window-horizontally "shrink h")
+  ("s" shrink-window "shrink v") )
 
 
 (defun prog-theme ()
   (interactive)
-  (set-face-font 'default "JuliaMono Bold 18" )
+  (set-face-font 'default "JuliaMono 18" )
   ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
-  (load-theme 'doom-challenger-deep)
-  (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
+
+  (load-theme 'doom-rouge)
+  (setq fancy-splash-image  "~/Drive/Org/logos/redcast.png")
   (doom-modeline-mode 1)
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t) )
@@ -192,7 +200,7 @@
 
 (defun one-theme ()
   (interactive)
-  (set-face-font 'default "JuliaMono Bold 18" )
+  (set-face-font 'default "JuliaMono 18" )
 
   ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
   (load-theme 'doom-one-light)
@@ -206,6 +214,10 @@
   (interactive)
   (set-face-font 'default "JuliaMono Bold 18" )
     ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
+
+(custom-set-faces!
+  '(doom-modeline-buffer-modified :foreground "orange"))
+
 
   (load-theme 'rebecca)
    ; (add-hook 'minibuffer-setup-hook ')
@@ -235,12 +247,11 @@
   )
 
 
-
 (defun nord-theme ()
   (interactive)
   (set-face-font 'default "Cascadia Code 18" )
   ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
-  (load-theme 'doom-nord)
+  (load-theme 'doom-nord-light)
   (setq fancy-splash-image  "~/Drive/Org/logos/dreamcast.png")
   (doom-modeline-mode 1)
   ;;(doom-enable-line-numbers-h)
@@ -255,7 +266,6 @@
   (doom-modeline-mode 1)
   ;;(doom-enable-line-numbers-h)
   (+doom-dashboard-reload t) )
-
 
 (load "~/Drive/less-theme-master/less-theme.el")
 
@@ -274,19 +284,29 @@
 
 (defun nautilus-here ()
   (interactive)
-  (shell-command "nautilus .")
+  (async-shell-command "nautilus .")
 )
+
+(defun vscode-here ()
+  (interactive)
+  (async-shell-command "code .")
+)
+
 
 (defun black-theme ()
   (interactive)
-  (load-theme 'less-black)
-  (set-face-font 'default "Roboto Mono Medium 17")
+  (load-theme 'doom-plain-dark)
+  ;; (set-face-font 'default "Roboto Mono Medium 17")
+   (set-face-font 'default "Julia Mono 17")
  ;; (random-choice
  ;;                          '("~/Drive/Org/logos/gnu2.png"
  ;;                            "~/Drive/Org/logos/ggnu.png"))
-  (setq fancy-splash-image '"~/Drive/Org/logos/quenya-2.png" )
-  (doom-modeline-mode -1)
-  (doom-disable-line-numbers-h)
+  (setq fancy-splash-image '"~/Drive/Org/logos/logo.png" )
+    (doom-modeline-mode -1)
+    (doom-disable-line-numbers-h)
+    (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
   (+doom-dashboard-reload t)
   )
 
@@ -331,8 +351,6 @@ Based on doi-utils-google-scholar."
     "http://scholar.google.com/scholar?q=%s" q))))
 
 (defun query-wordnik (query)
-"Google scholar the QUERY.
-Based on doi-utils-google-scholar."
   (interactive "sQUERY: ")
   (let ((q (string-join (split-string query) "+")))
     (browse-url
@@ -405,6 +423,15 @@ rotate entire document."
   (pdf-view--rotate :counterclockwise (not arg)))
 
 
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (let ((value (eval (elisp--preceding-sexp))))
+    (backward-kill-sexp)
+    (insert (format "%S" value))))
+
+
+
 (map! "C-c b h" #'helm-bibtex
       "C-c b o" #'orb-note-actions
       "C-c l s" #'org-store-link
@@ -416,6 +443,7 @@ rotate entire document."
       "C-c e c" #'comment-region
       "C-c e u" #'uncomment-region
       "C-c e a" #'org-fc-hydra-type/body
+      "C-c e s" #'org-edit-latex-fragment
       "C-c o o" #'olivetti-mode
       "C-c d d" #'+doom-dashboard/open
       "C-c D"  #'er-delete-file-and-buffer
@@ -448,20 +476,23 @@ rotate entire document."
       "C-c s s a" #'swiper-all
       "C-c g g" #'magit-status
       "C-c e l" #'mc/edit-lines
-
-      "C-c g a l" #'avy-goto-line
-      "C-c g a w 0" #'avy-goto-word-0
-      "C-c g a w 1 " #'avy-goto-word-1
-      "C-c g a c 1" #'avy-goto-char
-      "C-c g a c 2 " #'avy-goto-char-2
+      "C-c g l" #'avy-goto-line
+      "C-c g w 0" #'avy-goto-word-0
+      "C-c g w 1 " #'avy-goto-word-1
+      "C-c g c 1" #'avy-goto-char
+      "C-c g c 2 " #'avy-goto-char-2
       "C-c e m" #'mc/mark-all-in-region
       "C-c C-<mouse-1>" #'mc/add-cursor-on-click
       "C-c o h" #'outline-hide-body
       "C-c o a d" #'org-day
       "C-c o a w" #'org-week
       "C-c o T" #'display-time-mode
+      "C-c o r" #'evil-ex-resize
+      "C-x x" #'eval-and-replace
  )
 
+
+(defvar rascunho-path "~/Drive/Org/other")
 
 (set-register ?a (cons 'file "~/Drive/Org/agenda/week-agenda.org"))
 (set-register ?f
@@ -507,9 +538,9 @@ rotate entire document."
   :bind (:map dired-mode-map
               ("P" . peep-dired)))
 
-(use-package! magit-org-todos
-  :config
-  (magit-org-todos-autoinsert))
+;; (use-package! magit-org-todos
+  ;;; n:config
+  ;; (magit-org-todos-autoinsert))
 
 
  (use-package!  all-the-icons-dired
@@ -690,63 +721,10 @@ rotate entire document."
                       (:endgroup . nil)
                       ))
 
-;; fixing annoying snippet behavior
-;; https://stackoverflow.com/questions/7619640/emacs-latex-yasnippet-why-are-newlines-inserted-after-a-snippet
-;; (setq mode-require-final-newline nil)
-;; (use-package! org-super-agenda
-;;   :after org-agenda
-;;   :custom-face
-;;   (org-super-agenda-header ((default (:inherit propositum-agenda-heading))))
-
-;;   :init
-;;   (setq org-agenda-skip-scheduled-if-done t
-;;       org-agenda-skip-deadline-if-done t
-;;       org-agenda-include-deadlines t
-;;       org-agenda-block-separator nil
-;;       org-agenda-compact-blocks t
-;;       org-agenda-start-day nil ;; i.e. today
-;;       org-agenda-span 1
-;;       org-agenda-start-on-weekday nil)
-;;   (setq org-agenda-custom-commands
-;;         '(("c" "Super view"
-;;            ((agenda "" ((org-agenda-overriding-header "")
-;;                         (org-super-agenda-groups
-;;                          '((:name "Today"
-;;                                   :time-grid t
-;;                                   :date today
-;;                                   :order 1)))))
-;;             (alltodo "" ((org-agenda-overriding-header "")
-;;                          (org-super-agenda-groups
-;;                           '((:log t)
-;;                             (:name #(" due this week\n" 0 1 (rear-nonsticky t display (raise -0.24) font-lock-face (:family "Material Icons" :height 1.2) face (:family "Material Icons" :height 1.2)))
-;;                                    :deadline past)
-;;                             (:name "Important"
-;;                                    :priority "A"
-;;                                    :order 6)
-;;                             (:name "Due soon"
-;;                                    :deadline future)
-;;                             (:name "Due Today"
-;;                                    :deadline today
-;;                                    :order 2)
-;;                             (:name "Scheduled Soon"
-;;                                    :scheduled future
-;;                                    :order 8)
-;;                             (:name "Overdue"
-;;                                    :deadline past
-;;                                    :order 7)
-;;                             (:name "Meetings"
-;;                                    :and (:todo "MEET" :scheduled future)
-;;                                    :order 10)
-;;                             (:discard (:not (:todo "TODO")))))))))))
-;;   :config
-;;   (org-super-agenda-mode))
-
-; (setq lsp-haskell-process-path-hie  "haskell-language-server-wrapper")
-;; (setq lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper-1.0.0")
-
 (load-file (let ((coding-system-for-read 'utf-8))
                 (shell-command-to-string "agda-mode locate")))
-
+(setq lsp-enable-folding t)
+(setq lsp-folding-range-limit 1000)
 
 
 (custom-set-variables
@@ -798,7 +776,7 @@ rotate entire document."
     (cons 300 "#a87b93")
     (cons 320 "#b0a0b6")
     (cons 340 "#AEBACF")
-p    (cons 360 "#AEBACF")))
+    (cons 360 "#AEBACF")))
  '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

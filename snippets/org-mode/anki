@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name:anki
+# uuid:anki
+# key:anki
+# condition: t
+# --
+*
+:PROPERTIES:
+:ANKI_DECK: Default
+:ANKI_NOTE_TYPE: Basic
+:END:
+** Front
+
+** Back

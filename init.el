@@ -107,7 +107,7 @@
        agda              ; types of types of types of types...
        ;;cc                ; C/C++/Obj-C madness
        ;;clojure           ; java with a lisp
-       ;;common-lisp       ; if you've seen one lisp, you've seen them all
+       common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
@@ -128,9 +128,10 @@
        ;;json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       (julia)             ; a better, faster MATLAB
+       (julia +lsp)             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       latex             ; writing papers in Emacs has never been so fun
+       (latex +latexmk +cdlatex +fold)
+               ; writing papers in Emacs has never been so fun
        ;;lean
        ;;factor
        ;;ledger            ; an accounting system in Emacs
@@ -143,6 +144,8 @@
             +journal
             +dragndrop
             +pandoc
+            +pomodoro
+            +jupyter
 
             )               ; organize your plain life in plain text
        ;;perl              ; write code no one else can comprehend
@@ -173,6 +176,7 @@
 
        :app
        ;;calendar
+       everywhere
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
@@ -185,9 +189,7 @@
   (let* ((size (length items))
          (index (random size)))
     (nth index items)))
-
 (setq fancy-splash-image (random-choice
                           '("~/Drive/Org/logos/gnu2.png"
                            "~/Drive/Org/logos/ggnu.png")))
-
 (toggle-frame-maximized)
