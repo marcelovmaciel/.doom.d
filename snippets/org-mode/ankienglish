@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name:ankienglish
+# uuid:ankienglish
+# key:ankienglish
+# condition: t
+# --
+* What is
+:PROPERTIES:
+:ANKI_DECK: Default
+:ANKI_NOTE_TYPE: English
+:END:
+** Front
+What is  ?
+** Back

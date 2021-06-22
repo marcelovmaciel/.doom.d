@@ -489,6 +489,7 @@ rotate entire document."
       "C-c o T" #'display-time-mode
       "C-c o r" #'evil-ex-resize
       "C-x x" #'eval-and-replace
+      "C-c o s" #'org-roam-server-open
  )
 
 
@@ -697,6 +698,14 @@ rotate entire document."
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
+
+(defun org-roam-server-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive)
+    (smartparens-global-mode -1)
+    (org-roam-server-mode 1)
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))
+    (smartparens-global-mode 1))
 
 (use-package! outshine
   :hook (julia-mode . outshine-mode)
