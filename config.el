@@ -133,6 +133,13 @@
 
 (setq julia-url "https://docs.julialang.org")
 
+
+(grep-apply-setting
+   'grep-find-command
+   '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)
+ )
+
+
 (defun docs-julia ()
   "open julia docs on browser"
   (interactive)
@@ -200,7 +207,7 @@
 
 (defun one-theme ()
   (interactive)
-  (set-face-font 'default "JuliaMono 18" )
+  (set-face-font 'default "RobotoMono Medium 16" )
 
   ;; (set-frame-font  (font-spec :family "Cascadia Code" :size 18))
   (load-theme 'doom-one-light)
@@ -246,7 +253,7 @@
  '(mode-line-inactive ((t (:foreground "#fafafa" :background "#666666" :box nil))))
   )
 
-
+(setq bibtex-completion-find-additional-pdfs t)
 (defun nord-theme ()
   (interactive)
   (set-face-font 'default "Cascadia Code 18" )
@@ -447,7 +454,7 @@ rotate entire document."
       "C-c o o" #'olivetti-mode
       "C-c d d" #'+doom-dashboard/open
       "C-c D"  #'er-delete-file-and-buffer
-      "C-c s p" #'+ivy/project-search
+      "C-c s p" #'counsel-rg
       "C-c s o" #'+lookup/online
       "C-c s d" #'+lookup/dictionary-definition
       "C-c r e t" #'+eshell/toggle
@@ -490,6 +497,7 @@ rotate entire document."
       "C-c o r" #'evil-ex-resize
       "C-x x" #'eval-and-replace
       "C-c o s" #'org-roam-server-open
+      "C-x C-g" #'grep-find
  )
 
 

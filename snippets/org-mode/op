@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name:op
+# uuid:op
+# key:op
+# condition: t
+# --
+\operatorname
