@@ -66,6 +66,10 @@
 
 (package! dom)
 
+(package! nroam
+  :recipe (:host github :repo "NicolasPetton/nroam"))
+
+
 (package! org-fragtog)
 (package! page-break-lines)
 (package! forge)

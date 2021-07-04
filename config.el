@@ -56,6 +56,7 @@
 (use-package! org-roam
   :init
   (setq org-roam-directory "~/Drive/Org/org-roam-mvm")
+
   (require 'org-roam-protocol))
 
 (use-package! org-roam-protocol
@@ -477,6 +478,8 @@ rotate entire document."
       "C-c f p" #'proselint
       "C-c s a p" #'academic-phrases
       "C-c s a s" #'academic-phrases-by-section
+      "C-c s c u" #'company-math-symbols-unicode
+      "C-c s c l" #'company-math-symbols-latex
       "C-c s s s" #'swiper
       "C-c s s m" #'swiper-multi
       "C-c s s i" #'swiper-isearch
@@ -502,6 +505,8 @@ rotate entire document."
 
 
 (defvar rascunho-path "~/Drive/Org/other")
+(setq flycheck-global-modes nil)
+
 
 (set-register ?a (cons 'file "~/Drive/Org/agenda/week-agenda.org"))
 (set-register ?f
@@ -620,11 +625,12 @@ rotate entire document."
  )
 )
 
-;; (use-package mathpix.el
-;;   :custom ((mathpix-app-id "marcelovmaciel@gmail.com")
-;;            (mathpix-app-key "76Xrgm2HKGTZxbj"))
-;;   :bind
-;;   ("C-x m" . mathpix-screenshot))
+
+(use-package! nroam
+  :after org-roam
+  :config
+  (add-hook 'org-mode-hook #'nroam-setup-maybe))
+
 
 
 (use-package! org-roam-bibtex
