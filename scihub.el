@@ -63,7 +63,7 @@ See also `https://en.wikipedia.org/wiki/Sci-Hub' for updated domains."
           string)
   :group 'scihub)
 
-(defcustom scihub-download-directory (expand-file-name "~/papers/")
+(defcustom scihub-download-directory (expand-file-name "~/Downloads/")
   "Directory where the papers will be downloaded."
   :type '(directory :must-match t)
   :group 'scihub)

@@ -582,6 +582,25 @@ rotate entire document."
 
 (add-hook! text-mode (ispell-minor-mode))
 
+
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+              (sequence "ROUTINE(r)" "WAITING(w)" "|" "CANCELLED(c)")
+              (sequence "[ ]" "[-]" "[?]" "|" "[X]"))))
+(setq org-agenda-prefix-format '((agenda . " %i %?-12t% s")
+                                 (todo . " %i ")
+                                 (tags . " %i ")
+                                 (search . " %i ")))
+(setq-default org-export-with-todo-keywords nil)
+(setq-default org-enforce-todo-dependencies t)
+(setq org-agenda-custom-commands
+      '(("z" "Marcelo view"
+         ((agenda "" ((org-super-agenda-groups
+                       '((:auto-category t)))))))))
+
+(add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
 (use-package! org-fragtog
   :hook (org-mode . org-fragtog-mode))
 
@@ -626,10 +645,12 @@ rotate entire document."
 )
 
 
-(use-package! nroam
-  :after org-roam
-  :config
-  (add-hook 'org-mode-hook #'nroam-setup-maybe))
+;; (use-package! nroam
+;;   :after org-roam
+;;   :config
+;;   (add-hook 'org-mode-hook #'nroam-setup-maybe)
+
+;;   )
 
 
 
@@ -749,22 +770,29 @@ rotate entire document."
 (setq lsp-enable-folding t)
 (setq lsp-folding-range-limit 1000)
 
+(defvar eshell-modules-list
+  '(eshell-alias
+    eshell-banner
+    eshell-basic
+    eshell-cmpl
+    eshell-dirs
+    eshell-glob
+    eshell-hist
+    eshell-ls
+    eshell-pred
+    eshell-prompt
+    eshell-script
+    eshell-term
+    eshell-unix))
+(setq lsp-enable-folding t)
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#f2e5bc" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
- '(custom-safe-themes
-   (quote
-    ("ed4913967eddeccb37cfff93ea99fa4aa1401dfc578929ad49855fedaaf2bc7d" "d4028cb4bef9868c69332d37cfbbed72bfd039e9f478f15207c8e85ac7b0869a" "9b272154fb77a926f52f2756ed5872877ad8d73d018a426d44c6083d1ed972b1" "1623aa627fecd5877246f48199b8e2856647c99c6acdab506173f9bb8b0a41ac" "7b3d184d2955990e4df1162aeff6bfb4e1c3e822368f0359e15e2974235d9fa8" "893eb2887d8e59f6dde92c217801d310f8dacaefa3bf071b27f7bbb1deaa70b2" "0cb1b0ea66b145ad9b9e34c850ea8e842c4c4c83abe04e37455a1ef4cc5b8791" "6177ecbffb8f37756012c9ee9fd73fc043520836d254397566e37c6204118852" "3577ee091e1d318c49889574a31175970472f6f182a9789f1a3e9e4513641d86" "93ed23c504b202cf96ee591138b0012c295338f38046a1f3c14522d4a64d7308" "99ea831ca79a916f1bd789de366b639d09811501e8c092c85b2cb7d697777f93" "632694fd8a835e85bcc8b7bb5c1df1a0164689bc6009864faed38a9142b97057" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" default)))
- '(fci-rule-color "#AEBACF")
- '(jdee-db-active-breakpoint-face-colors (cons "#F0F4FC" "#5d86b6"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#F0F4FC" "#4F894C"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#F0F4FC" "#B8C5DB"))
- '(objed-cursor-color "#99324B")
+
  '(org-agenda-files
    (quote
     ("~/Drive/Org/Projects/nature-computation/todo.org" "~/Drive/Org/Projects/focus.org" "~/Drive/Org/org-roam-mvm/20200520213408-my_project_ideas.org" "~/Drive/Org/agenda/week-agenda.org")))
@@ -779,28 +807,7 @@ rotate entire document."
  '(pdf-view-midnight-colors (cons "#3B4252" "#E5E9F0"))
  '(rustic-ansi-faces
    ["#E5E9F0" "#99324B" "#4F894C" "#9A7500" "#3B6EA8" "#97365B" "#398EAC" "#3B4252"])
- '(vc-annotate-background "#E5E9F0")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#4F894C")
-    (cons 40 "#688232")
-    (cons 60 "#817b19")
-    (cons 80 "#9A7500")
-    (cons 100 "#a0640c")
-    (cons 120 "#a65419")
-    (cons 140 "#AC4426")
-    (cons 160 "#a53f37")
-    (cons 180 "#9e3a49")
-    (cons 200 "#97365B")
-    (cons 220 "#973455")
-    (cons 240 "#983350")
-    (cons 260 "#99324B")
-    (cons 280 "#a0566f")
-    (cons 300 "#a87b93")
-    (cons 320 "#b0a0b6")
-    (cons 340 "#AEBACF")
-    (cons 360 "#AEBACF")))
- '(vc-annotate-very-old-color nil))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
